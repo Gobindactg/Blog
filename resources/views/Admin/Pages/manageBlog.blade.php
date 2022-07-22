@@ -1,0 +1,68 @@
+@extends('Admin.Layout.MasterLayout')
+@section('content')
+<h1>Manage Slider</h1>
+<a href="{{route('blog')}}" class="btn btn-info mt-2 mb-2">Add Blog</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>S.L</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($blogs as $blog)
+        <tr>
+            <td>{{$loop->index+1}}</td>
+            <td>{{$blog->title}}</td>
+            <td>{{$blog->description}}</td>
+            <td><img src="{{asset('BlogImage/'.$blog->image)}}" alt="" style="width: 50px;"></td>
+            <td>
+                @if($blog->status = '1')
+                Published
+                @endif
+                @if($blog->status = '0')
+                Unpublished
+                @endif
+            </td>
+            <td> {{$blog->Category->name}}</td>
+            <td>
+                <a href="javascript:void(0)" class="btn btn-info" onclick="updateBlog({{ $blog->id }})">Edit</a>
+                <a href="javascript:void(0)" class="btn btn-danger" onclick="deleteBlog({{ $blog->id }})">delete</a>
+                
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+        function deleteBlog(id) {
+            if (confirm("Do You want to delete this Customer")) {
+
+                let _token = $("input[name=_token]").val();
+                $.ajax({
+                    url: 'http://localhost/internship/internShip/public/deleteBlog/' + id,
+                    type: 'GET',
+                    data: {
+                        _token: _token
+                    },
+                    success: function(response) {
+                        window.location.reload();
+
+                    }
+                });
+            }
+        }
+    </script>
+@endsection
