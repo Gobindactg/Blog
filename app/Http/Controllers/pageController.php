@@ -14,7 +14,7 @@ class pageController extends Controller
     public function index(){
         $banner = slider::orderBy('id', 'desc')->take(1)->get();
         $hero = heroimage::orderBy('id', 'desc')->take(2)->get();
-        $blog = blog::orderBy('id', 'desc')->paginate(8);;
+        $blog = blog::orderBy('id', 'desc')->where('status', 1)->paginate(8);;
         $blogRecent = blog::orderBy('id', 'asc')->paginate(3);
         $category = Category::orderBy('id', 'desc')->get();
         $logo = Logo::orderBy('id', 'desc')->take(1)->get();

@@ -39,7 +39,12 @@ Route::post('/heroImageStore', [AdminController::class, 'heroImageStore'])->name
 Route::get('/blog', [AdminController::class, 'blog'])->name('blog');
 Route::post('/blogStore', [AdminController::class, 'blogStore'])->name('blogStore');
 Route::get('/manageBlog', [AdminController::class, 'manageBlog'])->name('manageBlog');
+Route::get('/update-blog/{id}', [AdminController::class, 'blogUpdate'])->name('blogUpdate');
 Route::get('/deleteBlog/{id}', [AdminController::class, 'deleteBlog'])->name('deleteBlog');
+Route::get('/deletePublished/{id}', [AdminController::class, 'blogPublished'])->name('blogPublished');
+Route::get('/deleteUnpublished/{id}', [AdminController::class, 'blogUnpublished'])->name('blogUnpublished');
+
+
 
 Route::get('/category', [AdminController::class, 'category'])->name('category');
 Route::get('/manageCategory', [AdminController::class, 'manageCategory'])->name('manageCategory');

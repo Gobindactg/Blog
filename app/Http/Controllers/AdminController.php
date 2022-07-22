@@ -11,6 +11,8 @@ use App\Models\Blog;
 use App\Models\Logo;
 use File;
 use Intervention\Image\ImageManagerStatic as Image;
+use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
+
 class AdminController extends Controller
 {
     public function admin(){
@@ -18,8 +20,34 @@ class AdminController extends Controller
         return view('Admin.Pages.index');
     }
 
+    // slider section
     public function addSlider(){
         return view('Admin.Pages.addSlider');
+    }
+
+    public function sliderStore(Request $request){
+       
+		$blog = new slider();
+        $blog->title = $request->title;
+        $blog->description = $request->description;
+        if ($request->hasFile('image')) {
+			//   //insert that image
+			$image = $request->file('image');
+			$img = time() . '.' . $image->getClientOriginalExtension();
+			$location = public_path('BlogImage/' . $img);
+			Image::make($image)->save($location);
+			$blog->image = $img;
+            $blog->save();
+			
+		} 
+     
+        $blog->user_id = 1;
+       
+        $blog->save();
+        // session()->flash('success', 'Record Has Been Added Successfully');
+        return redirect()->route('addSlider');
+       
+        // return response()->json($blog);
     }
     public function manageSlider(){
         $slider = slider::orderBy('id', 'desc')->get();
@@ -32,14 +60,45 @@ class AdminController extends Controller
         $blog->delete();
         return back();
     }
+    
+     // slider section
 
     public function addHeroImage(){
         return view('Admin.Pages.addHeroImage');
     }
 
+
+
     public function blog(){
         $category = Category::orderBy('id','desc')->get();
         return view('Admin.Pages.addBlog', compact('category'));
+    }
+      //  Blog Store
+
+      public function blogStore(Request $request){
+       
+		$blog = new blog();
+        $blog->title = $request->title;
+        $blog->description = $request->description;
+        $blog->category_id = $request->category;
+        if ($request->hasFile('image')) {
+			//   //insert that image
+			$image = $request->file('image');
+			$img = time() . '.' . $image->getClientOriginalExtension();
+			$location = public_path('BlogImage/' . $img);
+			Image::make($image)->save($location);
+			$blog->image = $img;
+            $blog->save();
+			
+		} 
+     
+        $blog->user_id = 1;
+       
+        $blog->save();
+        // session()->flash('success', 'Record Has Been Added Successfully');
+        return redirect()->route('blog');
+       
+        // return response()->json($blog);
     }
     public function manageBlog(){
         $blogs = Blog::orderBy('id','desc')->get();
@@ -50,12 +109,33 @@ class AdminController extends Controller
         $blog->delete();
         return back();
     }
+    public function blogUpdate($id)
+    {
+        $data = Blog::find($id);
+        return response()->json($data);
+    }
     public function categoryStore(Request $request){
         $category = new Category();
         $category->name = $request->name;
         $category->save();
         return redirect()->route('category');
     }
+
+    public function blogPublished($id){
+        $data = Blog::find($id);
+        $data->status = 0;
+        $data->save();
+        return redirect()->route('manageBlog');
+
+    }
+    public function blogUnpublished($id){
+        $data = Blog::find($id);
+        $data->status = 1;
+        $data->save();
+        return redirect()->route('manageBlog');
+
+    }
+
 
     public function logo(){
         return view('Admin.Pages.logo');
@@ -69,6 +149,7 @@ class AdminController extends Controller
         $blog->delete();
         return back();
     }
+    
 
     public function logoStore(Request $request){
        
@@ -108,30 +189,7 @@ class AdminController extends Controller
         $blog->delete();
         return back();
     }
-    public function sliderStore(Request $request){
-       
-		$blog = new slider();
-        $blog->title = $request->title;
-        $blog->description = $request->description;
-        if ($request->hasFile('image')) {
-			//   //insert that image
-			$image = $request->file('image');
-			$img = time() . '.' . $image->getClientOriginalExtension();
-			$location = public_path('BlogImage/' . $img);
-			Image::make($image)->save($location);
-			$blog->image = $img;
-            $blog->save();
-			
-		} 
-     
-        $blog->user_id = 1;
-       
-        $blog->save();
-        // session()->flash('success', 'Record Has Been Added Successfully');
-        return redirect()->route('addSlider');
-       
-        // return response()->json($blog);
-    }
+   
 
     public function heroImageStore(Request $request){
        
@@ -158,31 +216,5 @@ class AdminController extends Controller
         // return response()->json($blog);
     }
 
-    //  Blog Store
-
-    public function blogStore(Request $request){
-       
-		$blog = new blog();
-        $blog->title = $request->title;
-        $blog->description = $request->description;
-        $blog->category_id = $request->category;
-        if ($request->hasFile('image')) {
-			//   //insert that image
-			$image = $request->file('image');
-			$img = time() . '.' . $image->getClientOriginalExtension();
-			$location = public_path('BlogImage/' . $img);
-			Image::make($image)->save($location);
-			$blog->image = $img;
-            $blog->save();
-			
-		} 
-     
-        $blog->user_id = 1;
-       
-        $blog->save();
-        // session()->flash('success', 'Record Has Been Added Successfully');
-        return redirect()->route('blog');
-       
-        // return response()->json($blog);
-    }
+  
 }
