@@ -14,10 +14,11 @@ class pageController extends Controller
     public function index(){
         $banner = slider::orderBy('id', 'desc')->take(1)->get();
         $hero = heroimage::orderBy('id', 'desc')->take(2)->get();
-        $blog = blog::orderBy('id', 'desc')->where('status', 1)->paginate(8);;
+        $blog = blog::orderBy('id', 'desc')->where('publication_status', 1)->paginate(8);;
         $blogRecent = blog::orderBy('id', 'asc')->paginate(3);
         $category = Category::orderBy('id', 'desc')->get();
+        $categorys = Category::with('blogs')->get();
         $logo = Logo::orderBy('id', 'desc')->take(1)->get();
-        return view('Layout.Master', compact('banner', 'hero', 'blog', 'blogRecent', 'category','logo'));
+        return view('Layout.Master', compact('banner', 'hero', 'blog', 'blogRecent', 'category','logo','categorys'));
     }
 }

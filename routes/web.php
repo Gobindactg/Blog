@@ -40,6 +40,7 @@ Route::get('/blog', [AdminController::class, 'blog'])->name('blog');
 Route::post('/blogStore', [AdminController::class, 'blogStore'])->name('blogStore');
 Route::get('/manageBlog', [AdminController::class, 'manageBlog'])->name('manageBlog');
 Route::get('/update-blog/{id}', [AdminController::class, 'blogUpdate'])->name('blogUpdate');
+Route::post('/update-store', [AdminController::class, 'blogUpdateStore'])->name('blogUpdateStore');
 Route::get('/deleteBlog/{id}', [AdminController::class, 'deleteBlog'])->name('deleteBlog');
 Route::get('/deletePublished/{id}', [AdminController::class, 'blogPublished'])->name('blogPublished');
 Route::get('/deleteUnpublished/{id}', [AdminController::class, 'blogUnpublished'])->name('blogUnpublished');
@@ -55,3 +56,7 @@ Route::get('/logo', [AdminController::class, 'logo'])->name('logo');
 Route::get('/manageLogo', [AdminController::class, 'manageLogo'])->name('manageLogo');
 Route::post('/logoStore', [AdminController::class, 'logoStore'])->name('logoStore');
 Route::get('/logoDelete/{id}', [AdminController::class, 'logoDelete'])->name('logoDelete');
+
+
+Route::get('/recycle-bin', [AdminController::class, 'recycleBin'])->name('recycleBin');
+Route::get('/recycle-restore/{id}', [AdminController::class, 'restore'])->name('restore');

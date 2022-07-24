@@ -9,11 +9,15 @@ use App\Models\Category;
 class Blog extends Model
 {
     use HasFactory;
-    public function Category()
+    protected $guarded = [];
+
+    public function Categorys()
     {
         return $this->belongsTo(Category::class);
-        
     }
 
-    
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
 }

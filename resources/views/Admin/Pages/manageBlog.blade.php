@@ -19,48 +19,72 @@
         <thead>
             <tr style="text-align:center ;">
                 <th style="width: 5%;">S.L</th>
-                <th style="width: 25%;">Title</th>
+                <th style="width: 15%;">Image</th>
+                <th style="width: 20%;">Title</th>
                 <th style="width: 40%;">Description</th>
-                <th style="width: 5%;">Image</th>
-                <th style="width: 5%;">Status</th>
-                <th style="width: 10%;">Category</th>
-                <th style="width: 10%;">Action</th>
+
+                <th style="width: 10%;">Status</th>
+
+                <th style="width: 10%; text-align:center">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($blogs as $blog)
             <tr>
                 <td>{{$loop->index+1}}</td>
-                <td>{{$blog->title}}</td>
-                <td>{{$blog->description}}</td>
                 <td><img src="{{asset('BlogImage/'.$blog->image)}}" alt="" style="width: 50px;"></td>
+
+                <td>{{$blog->title}} <br>{{$blog->Category->name}} </td>
+                <td>{{$blog->description}}</td>
+
                 <td>
-                    @if($blog->status == '1')
-                        <a class="btn btn-success" type="submit" href="{{route('blogPublished',$blog->id)}}">Published</a>
+                    @if($blog->publication_status == '1')
+                    <a class="btn btn-success" type="submit" href="{{route('blogPublished',$blog->id)}}" style="width:100%">Published</a>
                     @endif
-                    @if($blog->status =='0')
-                        <a class="btn btn-danger" type="submit"  href="{{route('blogUnpublished',$blog->id)}}">Unpublished</a>
-                    
+                    @if($blog->publication_status =='0')
+                    <a class="btn btn-danger" type="submit" href="{{route('blogUnpublished',$blog->id)}}" style="width:100%">Unpublished</a>
+
                     @endif
                 </td>
-                <td> {{$blog->Category->name}}</td>
-                <td>
+
+                <!-- <td> -->
+                <!-- <div class="dropdown"> -->
+
+
+                <td style="text-align:center">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="btn btn-success rounded btn-sm px-3 " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </span>
+                        <ul class="dropdown-menu text-center" aria-labelledby="action">
+                            <li><button class="m-2 btn btn-sm btn-success edit_button rounded" value="'.$blog->id.'"> Edit</button></li>
+                            <li><button class="m-2 btn btn-sm btn-danger delete_button rounded" value="'.$blog->id.'">Delete</button></li>
+                        </ul>
+                    </div>
+                    <!-- <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-cog"></i> <span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right" style="border: 1px solid gray;" role="menu">
+                            <li class="action" onclick="editParty({{$blog->id}})"><a  class="btn" ><i class="fas fa-edit"></i> Edit </a></li>
+                        </ul> -->
+</div>
+</td>
+
+<!-- <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Action
                         </button>
                         <div class="dropdown-menu pl-1 mt-2" aria-labelledby="dropdownMenuButton">
                             <a href="javascript:void(0)" class="btn btn-info" style="width: 47%;" onclick="updateBlog({{ $blog->id }})">Edit</a>
                             <a href="javascript:void(0)" class="btn btn-danger" style="width: 47%;" onclick="deleteBlog({{ $blog->id }})">delete</a>
                         </div>
-                    </div>
+                    </div> -->
 
 
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<!-- </td> -->
+</tr>
+@endforeach
+</tbody>
+</table>
 </div>
 
 <!-- start data delete Modal -->
@@ -102,8 +126,9 @@
             <div class="modal-body">
                 <h3 class="text-center" style="font-family: tahoma; font-style:italic; font-weight:900; font-size:25px; color:teal" id="blogId"></h3>
                 <div class="container">
-                    <form id="addBlog" type="POST" enctype="multipart/form-data" name="edit_product_form">
+                    <form id="updateBlogs" type="POST" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" id="id" name="id" value="">
                         <div class="form-group">
                             <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Blog Title</label>
                             <input type="text" name="title" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter Title">
@@ -118,7 +143,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Add New Image</label>
-                                    <input type="file" name="image" class="form-control" id="image" aria-describedby="emailHelp" placeholder="Enter Title" style="width: 20%;">
+                                    <input type="file" name="image" class="form-control" id="image" aria-describedby="emailHelp" placeholder="Enter Title" style="width: 70%;">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Old Image</label><br>
@@ -129,20 +154,22 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Category</label>
-                            <select name="category" id="category2" class="form-select" onclick="closeValue()">
+                            <select name="category" id="category2" class="form-select" required onclick="closeValue()">
                                 <option class="invisible" value="" id="category" selected></option>
                                 @foreach(App\Models\Category::category() as $cat)
-                                <option value="">{{$cat->id}} {{$cat->name}}</option>
+                                <option value="{{$cat->id}}">{{$cat->id}} {{$cat->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Publication Status</label>
-                            <select name="status" id="" class="form-select">
-                                <option value="0">Published</option>
-                                <option value="1">UnPublished</option>
+                            <label for="exampleInputEmail1" style="font-family: tahoma; font-style:italic; font-weight:700;font-size:15px">Category</label>
+                            <select name="status" id="status" class="form-select" required>
+                                <option class="invisible" value="" id="status" selected></option>
+                                <option value="1">1 Published</option>
+                                <option value="0"> 0 Unpublished</option>
                             </select>
                         </div>
+
                         <button type="submit" class="btn btn-primary">Submit</button>
 
                     </form>
@@ -165,8 +192,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-
 <!-- start data delete function -->
 <script>
     $.ajaxSetup({
@@ -224,10 +249,12 @@
         $('#dataUpdate').modal('show');
         $.get('http://localhost/internship/internShip/public/update-blog/' + id,
             function(blog) {
+                $("#id").val(blog.id);
                 $("#blogId").text('Update Blog # ' + blog.id);
                 $("#title").val(blog.title);
                 $("#description").val(blog.description);
                 $("#category").text(blog.category_id);
+                $("#status").val(blog.publication_status);
                 $("#blogImg").attr('src', 'BlogImage/' + blog.image);
             })
     }
@@ -238,33 +265,42 @@
     }
 </script>
 
-<!-- end data update Modal -->
+<!-- start data update Modal -->
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
-<!-- <script>
-    function deleteStudent(id) {
-        $('#deletemodal').modal('show');
-        // if (confirm("Do You want to delete this Customer")) {
-        $('button#deleteStudent').click(function(e) {
-            e.preventDefault();
-            $('#deletemodal').modal('hide');
+    $('#updateBlogs').submit(function(e) {
+        e.preventDefault();
 
-            let _token = $("input[name=_token]").val();
-            $.ajax({
-                url: 'http://localhost/My_Web/Update/School_Management/public/student/student/delete1/' + id,
-                type: 'POST',
-                data: {
-                    _token: _token
-                },
-                success: function(response) {
-                    var message = "Your Data Has Been Deleted Successfully";
-                    document.getElementById('successMessage').innerHTML = message;
-                    $("#student" + id).remove();
+        let formData = new FormData(this);
+        $('#image-input-error').text('');
+        $.ajax({
+            type: "POST",
+            url: "{{route('blogUpdateStore')}}",
+            data: formData,
+            contentType: false,
+            processData: false,
 
+            success: (response) => {
+                if (response) {
+                    this.reset();
+                    alert('Blog uploaded successfully');
+                    $('#dataUpdate').modal('hide');
                 }
-            });
-        })
-    }
-</script> -->
+            },
+            error: function(response) {
+                console.log(response);
+                $('#image-input-error').text(response.responseJSON.errors.file);
+            }
+
+
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {

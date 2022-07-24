@@ -6,7 +6,8 @@
     @csrf
     <div class="form-group">
       <label for="exampleInputEmail1">Blog Title</label>
-      <input type="text" name="title" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter Title">
+      <input type="text" name="title" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter Title" >
+      <span id="nameError"></span>
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1"> Blog Description</label>

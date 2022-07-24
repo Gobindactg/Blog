@@ -2,7 +2,7 @@
 <html class='ltr' dir='ltr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 
 <head>
-   
+
     @include('Partial.meta')
     @include('Partial.customjs')
     @include('Partial.css')
@@ -194,13 +194,17 @@
                                     <div class='index-post-inside-wrap'>
                                         <div class='post-image-wrap'>
                                             <a class='post-image-link' href='https://kate-soratemplates.blogspot.com/2016/03/i-like-fishing-because-it-is-always_18.html'>
+                                                @if($blogs->image == NULL)
+                                                <img alt='I like fishing because it is always the great way of relaxing' class='post-thumb invisible' src="{{asset('BlogImage/'.$blogs->image)}}" />
+                                                @else
                                                 <img alt='I like fishing because it is always the great way of relaxing' class='post-thumb' src="{{asset('BlogImage/'.$blogs->image)}}" />
+                                                @endif
                                             </a>
                                         </div>
                                         <div class='post-info-wrap'>
                                             <div class='post-info'>
                                                 <a class='post-tag' href='https://kate-soratemplates.blogspot.com/search/label/Beauty'>
-                                                   {{$blogs->Category->name}}
+                                                    {{$blogs->Category->name}}
                                                 </a>
                                                 <h2 class='post-title'>
                                                     <a href='https://kate-soratemplates.blogspot.com/2016/03/i-like-fishing-because-it-is-always_18.html'>{{$blogs->title}}</a>
@@ -219,7 +223,7 @@
                                 </div>
                                 @endforeach
                                 <div class=" pagination text-black ">
-                                {!! $blog->render() !!}
+                                    {!! $blog->render() !!}
                                 </div>
                             </div>
                         </div>
@@ -268,7 +272,7 @@
                             <div class='post'>
                                 <div class='post-content'>
                                     <a class='post-image-link' href='https://kate-soratemplates.blogspot.com/2016/03/i-like-fishing-because-it-is-always_18.html'>
-                                        <img alt='I like fishing because it is always the great way of relaxing' class='post-thumb' src="{{asset('BlogImage/'.$blogR->image)}}"/>
+                                        <img alt='I like fishing because it is always the great way of relaxing' class='post-thumb' src="{{asset('BlogImage/'.$blogR->image)}}" />
                                     </a>
                                     <div class='post-info'>
                                         <h2 class='post-title'>
@@ -278,7 +282,7 @@
                                 </div>
                             </div>
                             @endforeach
-                      
+
                         </div>
                     </div>
                     <div class='widget HTML' data-version='2' id='HTML1'>
@@ -331,15 +335,18 @@
                         </div>
                         <div class='widget-content list-label'>
                             <ul>
-                                @foreach($category as $cat)
+                                @foreach($categorys as $cat)
                                 <li>
                                     <a class='label-name' href='#'>
                                         {{$cat->name}}
-                                        <span class='label-count'>(5)</span>
+
+                                        <span class='label-count'>{{count($cat->blog)}}</span>
+
+
                                     </a>
                                 </li>
                                 @endforeach
-                        
+
                             </ul>
                         </div>
                     </div>

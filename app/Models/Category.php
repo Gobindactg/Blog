@@ -12,7 +12,15 @@ class Category extends Model
     {
         $category = Category::orderBy('id', 'desc')->get();
 
-            return $category;
+        return $category;
     }
 
+    public function blogs()
+    {
+        return $this->belongsTo(Blog::class);
+    }
+    public function blog()
+    {
+        return $this->hasMany('App\Models\Blog');
+    }
 }

@@ -64,9 +64,70 @@
         </table>
     </div>
 </div>
+
+<!-- start data delete Modal -->
+<div class="modal" id="deletemodal">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <!-- Modal body -->
+            <div class="modal-header" style="background-color: #AED6F1 ;">
+
+            </div>
+            <div class="modal-body">
+                <div class="text-center"><img src="{{asset('warning/alert1.jpg')}}" style="width:80px; height:80px; " alt=""></div>
+
+                <h6 class="text-center mt-4 mb-3" style="font-family: tahoma; font-style:italic; font-weight:900; font-size:16px; color:red">Are You Sure Want To Permanent Delete ?</h6>
+
+                <h6 style="font-weight: 900; color:black; padding-top:5px; padding-bottom:5px"><label for="exampleInputEmail1">Please Write <span class="text-primary" style="font-size: 22px;"> &nbsp confirm </span> </label> <input id="confirm" type="text" onchange="myFunction()" class="text-center form-control" placeholder="Write 'confirm' to delete"></h6>
+                <hr style=" font-size: 18px; color:black; padding:5px; margin:0;">
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer" style="background-color: #AED6F1 ;">
+                <button type=" button" class="btn btn-success" id="colseModal" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                <button id="deleteStudent" type="button" class="btn btn-danger disabled">Delete</button>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--  end data delete modal-->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    function deleteBlog(id) {
+        $('#deletemodal').modal('show');
+        // if (confirm("Do You want to delete this Customer")) {
+        $('button#deleteStudent').click(function(e) {
+            e.preventDefault();
+            $('#deletemodal').modal('hide');
+
+            let _token = $("input[name=_token]").val();
+            $.ajax({
+                url: 'http://localhost/internship/internShip/public/deleteBlog/' + id,
+                type: 'GET',
+                data: {
+                    _token: _token
+                },
+                success: function(response) {
+                    location.reload();
+
+                }
+            });
+        })
+    }
+</script>
 <script>
     $(document).ready(function() {
         $('#table1').DataTable();

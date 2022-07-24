@@ -91,6 +91,14 @@
         </div>
     </li>
     <li class="nav-item">
+        <a class="nav-link collapsed" href="{{route('recycleBin')}}" 
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Recycle Bin</span>
+        </a>
+      
+    </li>
+    <li class="nav-item">
   
 
     <!-- Nav Item - Utilities Collapse Menu -->
